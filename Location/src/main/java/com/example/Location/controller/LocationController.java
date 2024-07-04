@@ -24,17 +24,6 @@ public class LocationController {
     @Autowired
     public RestTemplate restTemplate;
 
-    /*@GetMapping
-    public List<Location> getLocationList(@RequestParam(required = false) final String name) {
-        if (name != null) {
-            if (repository.findByName(name).isPresent())return Collections.singletonList(repository.
-                    findByName(name).get());
-            return null;
-        } else {
-            return Collections.singletonList((Location) repository.findAll());
-        }
-    }*/
-
     @GetMapping("/location/")
     public Iterable<Location> getIterableLocation() {
         return repository.findAll();
@@ -76,7 +65,7 @@ public class LocationController {
             return null;
         }
 
-        String url = String.format("http://localhost:8082/weather?lat=%s&lon=%s", location.getLatitude(),
+        String url = String.format("http://weather-info-service/weather?lat=%s&lon=%s", location.getLatitude(),
                 location.getLongitude());
         String o = restTemplate.getForObject(url, String.class);
 
