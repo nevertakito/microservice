@@ -17,6 +17,7 @@ import java.util.stream.StreamSupport;
 
 
 @RestController
+@RequestMapping("/location")
 public class LocationController {
 
     @Autowired
@@ -24,21 +25,21 @@ public class LocationController {
     @Autowired
     public RestTemplate restTemplate;
 
-    @GetMapping("/location/")
+    @GetMapping
     public Iterable<Location> getIterableLocation() {
         return repository.findAll();
     }
-    @GetMapping("/location")
+    @GetMapping(params = "name")
     public Optional<Location> getLocation(@RequestParam String name){
         return repository.findByName(name);
     }
 
-    @PostMapping("/location")
+    @PostMapping
     public Location save(@RequestBody Location location) {
         return repository.save(location);
     }
 
-    @PutMapping("/location")
+    @PutMapping
     public Location put(@RequestParam String name, @RequestBody Location location){
         if(repository.findByName(name).isPresent()){
             Location loc = repository.findByName(name).get();
@@ -50,12 +51,12 @@ public class LocationController {
         return null;
     }
 
-    @DeleteMapping("/location")
+    @DeleteMapping
     public void delete(@RequestParam String name){
         if(repository.findByName(name).isPresent()) repository.delete(repository.findByName(name).get());
     }
 
-    @GetMapping("/location/weather")
+    @GetMapping("/weather")
     public Weather redirectRequestWeather(@RequestParam String name) throws JsonProcessingException {
         Location location;
         if(repository.findByName(name).isPresent()){

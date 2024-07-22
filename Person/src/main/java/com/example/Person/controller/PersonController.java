@@ -52,7 +52,12 @@ public class PersonController {
     @PutMapping("/{id}")
     public Person put(@PathVariable int id, @RequestBody Person person){
         if(repository.findById(id).isPresent()){
-            Person newPerson = new Person(repository.findById(id).get());
+            Person newPerson = repository.findById(id).orElse(new Person());
+            newPerson.setFirstname(person.getFirstname());
+            newPerson.setSurname(person.getSurname());
+            newPerson.setLastname(person.getLastname());
+            newPerson.setBirthday(person.getBirthday());
+            newPerson.setLocation(person.getLocation());
             return repository.save(newPerson);
         }
         return null;

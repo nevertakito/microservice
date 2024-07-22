@@ -21,15 +21,8 @@ public class Person {
     String firstname;
     String surname;
     String lastname;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     LocalDate birthday;
     String location;
 
-    public Person(Person person){
-        this.firstname = person.getFirstname();
-        this.surname = person.getSurname();
-        this.lastname = person.getLastname();
-        this.birthday = person.getBirthday();
-        this.location = person.getLocation();
-    }
 }
