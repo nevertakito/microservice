@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,8 @@ public class LocationController {
     private LocationRepository repository;
     @Autowired
     public RestTemplate restTemplate;
+    @Value("${weather.url}")
+    String weatherUrl;
 
     @GetMapping
     public Iterable<Location> getIterableLocation() {
@@ -57,6 +60,13 @@ public class LocationController {
     }
 
     @GetMapping("/weather")
+    public Weather redirectRequestWeather(@RequestParam String location) {
+        Location loc = repository.findByName(location).get();
+        String url = String.format("http://%s/weather?lat=%s&lon=%s", weatherUrl, loc.getLatitude(), loc.getLongitude());
+        return restTemplate.getForObject(url, Weather.class);
+    }
+
+    /*@GetMapping("/weather")
     public Weather redirectRequestWeather(@RequestParam String name) throws JsonProcessingException {
         Location location;
         if(repository.findByName(name).isPresent()){
@@ -83,5 +93,5 @@ public class LocationController {
         };
         Map<String, Object> map = objectMapper.readValue(str, typeReference);
         return map;
-    }
+    }*/
 }
